@@ -1,0 +1,297 @@
+{% extends 'base.html' %}
+{% load document_preview %}
+{% block content %}
+<div class="container mt-5">
+    <h2>{{ candidate.full_name }}'s Application Data</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th colspan="2">Application Data</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Follow-Up Information -->
+            <tr>
+                <th>Assigned To</th>
+                <td>{{ application_data.follow_up_assigned_to }}</td>
+            </tr>
+
+            <!-- HMC Portal Information -->
+            <tr>
+                <th colspan="2" class="table-primary">HMC Portal Information</th>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ application_data.HMC_Portal_email }}</td>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <td>{{ application_data.HMC_Portal_password }}</td>
+            </tr>
+            <tr>
+                <th>Job Offer ID</th>
+                <td>{{ application_data.JOB_OFFER_ID }}</td>
+            </tr>
+
+            <!-- DataFlow Information -->
+            <tr>
+                <th colspan="2" class="table-primary">DataFlow Information</th>
+            </tr>
+            <tr>
+                <th>Issue Date</th>
+                <td>{{ application_data.DataFlow_issue_date }}</td>
+            </tr>
+            <tr>
+                <th>Expiry Date</th>
+                <td>{{ application_data.DataFlow_expiry_date }}</td>
+            </tr>
+            <tr>
+                <th>Appointment Copy</th>
+                <td>
+                    {% if application_data.DataFlow_Appointment_copy %}
+                        {% document_preview application_data.DataFlow_Appointment_copy.url %}
+                    {% else %}
+                        <span class="text-danger">Not Provided</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Case Number</th>
+                <td>{{ application_data.DataFlow_case_number }}</td>
+            </tr>
+            <tr>
+                <th>Passport Number</th>
+                <td>{{ application_data.DataFlow_passport_number }}</td>
+            </tr>
+            <tr>
+                <th>Is Paid</th>
+                <td>{{ application_data.DataFlow_is_paid|yesno:"Yes,No" }}</td>
+            </tr>
+            <tr>
+                <th>Certificate Copy</th>
+                <td>
+                    {% if application_data.DataFlow_certificate_copy %}
+                        {% document_preview application_data.DataFlow_certificate_copy.url %}
+                    {% else %}
+                        <span class="text-danger">Not Provided</span>
+                    {% endif %}
+                </td>
+            </tr>
+
+            <!-- DHP Information -->
+            <tr>
+                <th colspan="2" class="table-primary">DHP Information</th>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ application_data.DHP_email }}</td>
+            </tr>
+            <tr>
+                <th>Number</th>
+                <td>{{ application_data.DHP_number }}</td>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <td>{{ application_data.DHP_Password }}</td>
+            </tr>
+            <tr>
+                <th>Issue Date</th>
+                <td>{{ application_data.DHP_issue_date }}</td>
+            </tr>
+            <tr>
+                <th>Expiry Date</th>
+                <td>{{ application_data.DHP_expiry_date }}</td>
+            </tr>
+            <tr>
+                <th>Certificate Copy</th>
+                <td>
+                    {% if application_data.DHP_copy %}
+                        {% document_preview application_data.DHP_copy.url %}
+                    {% else %}
+                        <span class="text-danger">Not Provided</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ application_data.DHP_note }}</td>
+            </tr>
+            <tr>
+                <th>Is Dataflow Candidate</th>
+                <td>{{ application_data.is_dataflow|yesno:"Yes,No" }}</td>
+            </tr>
+            <tr>
+                <th>Is Prometric Candidate</th>
+                <td>{{ application_data.is_Prometric|yesno:"Yes,No" }}</td>
+            </tr>
+            <tr>
+                <th>Is Completed Payment</th>
+                <td>{{ application_data.is_completed_payment|yesno:"Yes,No" }}</td>
+            </tr>
+
+            <!-- Police Clearance Certificate (PCC) -->
+            <tr>
+                <th colspan="2" class="table-primary">Police Clearance Certificate (PCC)</th>
+            </tr>
+            <tr>
+                <th>Issue Date</th>
+                <td>{{ application_data.PCC_issue_date }}</td>
+            </tr>
+            <tr>
+                <th>Expiry Date</th>
+                <td>{{ application_data.PCC_expiry_date }}</td>
+            </tr>
+            <tr>
+                <th>Is Stamped</th>
+                <td>{{ application_data.PCC_is_stamp|yesno:"Yes,No" }}</td>
+            </tr>
+            <tr>
+                <th>Clearance Copy</th>
+                <td>
+                    {% if application_data.PCC_clearance_copy %}
+                        {% document_preview application_data.PCC_clearance_copy.url %}
+                    {% else %}
+                        <span class="text-danger">Not Provided</span>
+                    {% endif %}
+                </td>
+            </tr>
+
+            <!-- Prometric Information -->
+            <tr>
+                <th colspan="2" class="table-primary">Prometric Information</th>
+            </tr>
+            <tr>
+                <th>Issue Date</th>
+                <td>{{ application_data.Prometric_issue_date }}</td>
+            </tr>
+            <tr>
+                <th>Expiry Date</th>
+                <td>{{ application_data.Prometric_expiry_date }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ application_data.get_Prometric_status_display }}</td>
+            </tr>
+            <tr>
+                <th>Certificate Copy</th>
+                <td>
+                    {% if application_data.Prometric_certificate_copy %}
+                        {% document_preview application_data.Prometric_certificate_copy.url %}
+                    {% else %}
+                        <span class="text-danger">Not Provided</span>
+                    {% endif %}
+                </td>
+            </tr>
+
+            <!-- Medical Tests -->
+            <tr>
+                <th colspan="2" class="table-primary">Medical Tests</th>
+            </tr>
+            <tr>
+                <th>Blood Test</th>
+                <td>{{ application_data.MedicalTest_blood_test|yesno:"Yes,No" }}</td>
+            </tr>
+            <tr>
+                <th>Blood Test Report</th>
+                <td>
+                    {% if application_data.MedicalTest_blood_test_report %}
+                        {% document_preview application_data.MedicalTest_blood_test_report.url %}
+                    {% else %}
+                        <span class="text-danger">Not Provided</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>X-Ray Test</th>
+                <td>{{ application_data.MedicalTest_xray_test|yesno:"Yes,No" }}</td>
+            </tr>
+            <tr>
+                <th>X-Ray Test Report</th>
+                <td>
+                    {% if application_data.MedicalTest_xray_test_report %}
+                        {% document_preview application_data.MedicalTest_xray_test_report.url %}
+                    {% else %}
+                        <span class="text-danger">Not Provided</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Is Pregnant</th>
+                <td>{{ application_data.MedicalTest_is_pregnant|yesno:"Yes,No" }}</td>
+            </tr>
+            <tr>
+                <th>Pregnancy Report</th>
+                <td>
+                    {% if application_data.MedicalTest_pregnancy_report %}
+                        {% document_preview application_data.MedicalTest_pregnancy_report.url %}
+                    {% else %}
+                        <span class="text-danger">Not Provided</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Fit to Work</th>
+                <td>{{ application_data.MedicalTest_fit_to_work|yesno:"Yes,No" }}</td>
+            </tr>
+            <tr>
+                <th>Fit to Work Report</th>
+                <td>
+                    {% if application_data.MedicalTest_fit_to_work_report %}
+                        {% document_preview application_data.MedicalTest_fit_to_work_report.url %}
+                    {% else %}
+                        <span class="text-danger">Not Provided</span>
+                    {% endif %}
+                </td>
+            </tr>
+
+            <!-- Travel Details -->
+            <tr>
+                <th colspan="2" class="table-primary">Travel Details</th>
+            </tr>
+            <tr>
+                <th>Departure Date</th>
+                <td>{{ application_data.TravelDetails_departure_date }}</td>
+            </tr>
+            <tr>
+                <th>Airport</th>
+                <td>{{ application_data.TravelDetails_airport }}</td>
+            </tr>
+            <tr>
+                <th>Travel Notes</th>
+                <td>{{ application_data.TravelDetails_note }}</td>
+            </tr>
+
+            <!-- Visa Information -->
+            <tr>
+                <th colspan="2" class="table-primary">Visa Information</th>
+            </tr>
+            <tr>
+                <th>Issue Date</th>
+                <td>{{ application_data.Visa_issue_date }}</td>
+            </tr>
+            <tr>
+                <th>Expiry Date</th>
+                <td>{{ application_data.Visa_expiry_date }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ application_data.get_Visa_status_display }}</td>
+            </tr>
+            <tr>
+                <th>Visa Certificate Copy</th>
+                <td>
+                    {% if application_data.Visa_copy %}
+                        {% document_preview application_data.Visa_copy.url %}
+                    {% else %}
+                        <span class="text-danger">Not Provided</span>
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Edit Button -->
+    <a href="{% url 'candidates:candidate_application_data_update' candidate_pk=candidate.pk %}" class="btn btn-primary">Edit</a>
+    <a href="{% url 'candidates:candidate_detail' pk=candidate.pk %}" class="btn btn-secondary">Back to Profile</a>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+<!-- include/candidate_add_info.html -->
+<nav class="navbar navbar-light bg-light my-3 p-3">
+    <div class="container-fluid">
+
+
+
+        <div class="d-flex flex-wrap align-items-center gap-3">
+            <!-- Edit Candidate Info -->
+            <a class="nav-link d-flex align-items-center" href="{% url 'candidates:candidate_update' candidate.pk %}">
+                <i class="fas fa-user mr-1"></i>
+                <span>Edit Candidate Info</span>
+            </a>
+
+            <!-- Add Education -->
+            <a class="nav-link d-flex align-items-center" href="{% url 'candidates:education_create' candidate_pk=candidate.pk %}">
+                <i class="fas fa-graduation-cap mr-1"></i>
+                <span>Add Education</span>
+            </a>
+
+            <!-- Add Experience -->
+            <a class="nav-link d-flex align-items-center" href="{% url 'candidates:experience_create' candidate_pk=candidate.pk %}">
+                <i class="fas fa-briefcase mr-1"></i>
+                <span>Add Experience</span>
+            </a>
+            <!-- Add License -->
+            <a class="nav-link d-flex align-items-center" href="{% url 'candidates:license_create' candidate_pk=candidate.pk %}">
+                <i class="fas fa-id-card mr-1"></i>
+
+                <span>Add License</span>
+            </a>
+            <!-- Add Language -->
+            <a class="nav-link d-flex align-items-center" href="{% url 'candidates:language_create' candidate_pk=candidate.pk %}">
+                <i class="fas fa-language mr-1"></i>
+                <span>Add Language</span>
+            </a>
+
+            <!-- Add Training Course -->
+            <a class="nav-link d-flex align-items-center" href="{% url 'candidates:training_course_create' candidate_pk=candidate.pk %}">
+                <i class="fas fa-chalkboard-teacher mr-1"></i>
+                <span>Add Training Course</span>
+            </a>
+
+            <!-- Update Application Data -->
+            <a class="nav-link d-flex align-items-center" href="{% url 'candidates:candidate_application_data_update' candidate_pk=candidate.pk %}">
+                <i class="fas fa-edit mr-1"></i>
+                <span>Update Application Data</span>
+            </a>
+
+            <!-- View Application Data -->
+            <a class="nav-link d-flex align-items-center" href="{% url 'candidates:candidate_application_data_detail' candidate_pk=candidate.pk %}">
+                <i class="fas fa-info-circle mr-1"></i>
+                <span>View Application Data</span>
+            </a>
+        </div>
+    </div>
+</nav>

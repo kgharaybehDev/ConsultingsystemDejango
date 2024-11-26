@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>{% trans "Job Opportunities" %}</h1>
+    <div class="mb-3">
+        <a href="{% url 'jobs:job_opportunity_create' %}" class="btn btn-primary">
+            {% trans "Create New Job Opportunity" %}
+        </a>
+    </div>
+
+    {% if job_opportunities %}
+    <!-- Per-page selection -->
+    <form method="get" class="mb-3">
+        <label for="per_page">{% trans "Items per page:" %}</label>
+        <select name="per_page" id="per_page" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
+            <option value="5" {% if per_page == 5 %}selected{% endif %}>5</option>
+            <option value="10" {% if per_page == 10 %}selected{% endif %}>10</option>
+            <option value="20" {% if per_page == 20 %}selected{% endif %}>20</option>
+        </select>
+        <input type="hidden" name="sort" value="{{ sort_by }}">
+        <input type="hidden" name="order" value="{{ order }}">
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    <a href="?sort=job_title&order={% if sort_by == 'job_title' and order == 'asc' %}desc{% else %}asc{% endif %}&per_page={{ per_page }}">
+                        {% trans "Job Title" %}
+                        {% if sort_by == "job_title" %}
+                            {% if order == "asc" %} &#9650; {% else %} &#9660; {% endif %}
+                        {% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="?sort=company_name&order={% if sort_by == 'company_name' and order == 'asc' %}desc{% else %}asc{% endif %}&per_page={{ per_page }}">
+                        {% trans "Company Name" %}
+                        {% if sort_by == "company_name" %}
+                            {% if order == "asc" %} &#9650; {% else %} &#9660; {% endif %}
+                        {% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="?sort=job_department&order={% if sort_by == 'job_department' and order == 'asc' %}desc{% else %}asc{% endif %}&per_page={{ per_page }}">
+                        {% trans "Department" %}
+                        {% if sort_by == "job_department" %}
+                            {% if order == "asc" %} &#9650; {% else %} &#9660; {% endif %}
+                        {% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="?sort=created_at&order={% if sort_by == 'created_at' and order == 'asc' %}desc{% else %}asc{% endif %}&per_page={{ per_page }}">
+                        {% trans "Created At" %}
+                        {% if sort_by == "created_at" %}
+                            {% if order == "asc" %} &#9650; {% else %} &#9660; {% endif %}
+                        {% endif %}
+                    </a>
+                </th>
+                <th>{% trans "Actions" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for job in job_opportunities %}
+            <tr>
+                <td>{{ job.job_title }}</td>
+                <td>{{ job.company_name }}</td>
+                <td>{{ job.job_department }}</td>
+                <td>{{ job.created_at|date:"Y-m-d" }}</td>
+                <td>
+                    <a href="{% url 'jobs:job_opportunity_detail' job.pk %}" class="btn btn-sm btn-info">
+                        {% trans "View Details" %}
+                    </a>
+                    <a href="{% url 'jobs:job_opportunity_edit' job.pk %}" class="btn btn-sm btn-warning">
+                        {% trans "Edit" %}
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if job_opportunities.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1&sort={{ sort_by }}&order={{ order }}&per_page={{ per_page }}" aria-label="First">
+                        &laquo;&laquo;
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ job_opportunities.previous_page_number }}&sort={{ sort_by }}&order={{ order }}&per_page={{ per_page }}" aria-label="Previous">
+                        &laquo;
+                    </a>
+                </li>
+            {% endif %}
+
+            {% for num in job_opportunities.paginator.page_range %}
+                {% if job_opportunities.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}&sort={{ sort_by }}&order={{ order }}&per_page={{ per_page }}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if job_opportunities.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ job_opportunities.next_page_number }}&sort={{ sort_by }}&order={{ order }}&per_page={{ per_page }}" aria-label="Next">
+                        &raquo;
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ job_opportunities.paginator.num_pages }}&sort={{ sort_by }}&order={{ order }}&per_page={{ per_page }}" aria-label="Last">
+                        &raquo;&raquo;
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% else %}
+    <p>{% trans "No job opportunities available." %}</p>
+    {% endif %}
+</div>
+{% endblock %}

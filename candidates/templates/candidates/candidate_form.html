@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load document_preview %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+
+
+    <h2>{{ object.pk|yesno:"Edit Profile,Create Profile" }}</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+
+       <h5 class="mb-3">Personal Details</h5>
+            <hr>
+        <div class="row mb-3">
+
+            <div class="col-md-3">
+                {{ form.first_name|as_crispy_field }}
+            </div>
+            <div class="col-md-3">
+                {{ form.second_name|as_crispy_field }}
+            </div>
+            <div class="col-md-3">
+                {{ form.third_name|as_crispy_field }}
+            </div>
+            <div class="col-md-3">
+                {{ form.last_name|as_crispy_field }}
+            </div>
+        </div>
+
+
+        <div class="row mb-3">
+
+            <div class="col-md-6">
+                {{ form.gender|as_crispy_field }}
+            </div>
+            <div class="col-md-6">
+                {{ form.birthday|as_crispy_field }}
+            </div>
+
+
+        </div>
+
+
+        <div class="row mb-3">
+
+            <div class="col-md-6">
+                {{ form.country|as_crispy_field }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.address|as_crispy_field }}
+            </div>
+
+        </div>
+
+   <h5 class="mb-3">Contact Details</h5>
+        <hr>
+        <div class="row mb-3">
+
+            <div class="col-md-4">
+                {{ form.email|as_crispy_field }}
+            </div>
+            <div class="col-md-4">
+                {{ form.call_phone_number|as_crispy_field }}
+            </div>
+            <div class="col-md-4">
+                {{ form.whatsapp_phone_number|as_crispy_field }}
+            </div>
+        </div>
+
+     <h5 class="mb-3">Identity information.</h5>
+        <hr>
+        <div class="row mb-3">
+
+            <div class="col-md-4">
+                {{ form.nationality|as_crispy_field }}
+            </div>
+            <div class="col-md-4">
+                {{ form.national_id_number|as_crispy_field }}
+            </div>
+            <div class="col-md-4">
+                {% if candidate.national_id_copy and candidate.national_id_copy.url %}
+                    <strong class="mb-3">National ID Copy</strong>
+                    {% document_preview candidate.national_id_copy.url %}
+                    <!-- Example delete link with class for JavaScript selection -->
+                    <a href="#" class="delete-file-link" data-url="{% url 'candidates:delete_id_copy' candidate.id %}"
+                       data-file-name="National ID Copy">
+                        <i class="fa fa-trash"></i> delete
+                    </a>
+
+
+                {% else %}
+                    {{ form.national_id_copy|as_crispy_field }}
+                {% endif %}
+            </div>
+        </div>
+        <!-- 'passport_copy', 'passport_expiration_date', 'passport_id', -->
+     <h5 class="mb-3"> Please upload a copy of your passport</h5>
+        <hr>
+        <div class="row mb-3">
+
+            <div class="col-md-4">
+                {{ form.passport_id|as_crispy_field }}
+            </div>
+            <div class="col-md-4">
+                {{ form.passport_expiration_date|as_crispy_field }}
+            </div>
+            <div class="col-md-4">
+
+                {% if candidate.passport_copy and candidate.passport_copy.url %}
+                    <strong class="mb-3">Passport Copy</strong>
+                    {% document_preview candidate.passport_copy.url %}
+                    <a href="#" class="delete-file-link"
+                       data-url="{% url 'candidates:delete_passport_copy' candidate.id %}"
+                       data-file-name="Passport Copy">
+                        <i class="fa fa-trash"></i> delete
+                    </a>
+
+                {% else %}
+                    {{ form.passport_copy|as_crispy_field }}
+                {% endif %}
+            </div>
+        </div>
+        <!--'is_open_to_work', 'personal_image', 'resume_copy' -->
+              <h5 class="mb-3">Job information</h5>
+        <hr>
+        <div class="row mb-3">
+
+            <div class="col-md-4">
+                {{ form.is_open_to_work|as_crispy_field }}
+            </div>
+            <div class="col-md-4">
+                {% if candidate.personal_image and candidate.personal_image.url %}
+                    <strong class="mb-3">Personal Image</strong>
+                    {% document_preview candidate.personal_image.url %}
+                    <a href="#" class="delete-file-link"
+                       data-url="{% url 'candidates:delete_personal_image' candidate.id %}"
+                       data-file-name="Personal Image">
+                        <i class="fa fa-trash"></i> delete
+                    </a>
+
+                {% else %}
+                    {{ form.personal_image|as_crispy_field }}
+                {% endif %}
+
+            </div>
+            <div class="col-md-4">
+                {% if candidate.resume_copy and candidate.resume_copy.url %}
+                    <strong class="mb-3">Resume Copy</strong>
+                    {% document_preview candidate.resume_copy.url %}
+                    <a href="#" class="delete-file-link" data-url="{% url 'candidates:delete_resume' candidate.id %}"
+                       data-file-name="Resume Copy">
+                        <i class="fa fa-trash"></i> delete
+                    </a>
+
+                {% else %}
+                    {{ form.resume_copy|as_crispy_field }}
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Add other fields as needed -->
+        <button type="submit" class="btn btn-primary">Save</button>
+        {% if object.pk %}
+            <a href="{% url 'candidate:profile' candidate_id=object.pk %}" class="btn btn-secondary">Cancel</a>
+        {% endif %}
+    </form>
+{% endblock %}
+

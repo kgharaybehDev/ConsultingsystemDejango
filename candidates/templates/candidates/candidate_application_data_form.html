@@ -1,0 +1,418 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% load document_preview %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Update Candidate Application Data for {{ form.instance.candidate.full_name }}</h1>
+        <nav class="mb-4">
+            <a href="{% url 'documents:candidate_export_pdf_CV' pk=candidate.pk %}">
+                Download CV as PDF
+            </a>
+
+            |
+
+            <a href="{% url 'documents:HMC_Sheet' pk=candidate.pk %}">
+                Download HMC Sheet as PDF
+            </a>
+            | <a href="{% url 'candidates:download_candidate_directory' candidate_id=candidate.id %}">
+            Download Candidate Files
+        </a>
+            |
+            <!-- templates/candidates/candidate_detail.html -->
+
+            <a href="{% url 'candidates:download_vcf' candidate_id=candidate.id %}">
+                <i class="fas fa-address-card"></i> Download VCF
+            </a>
+        </nav>
+        <!-- Navigation Section for Fast Access -->
+        <nav class="mb-4">
+            <ul class="nav nav-pills">
+                <li class="nav-item"><a class="nav-link" href="#basic-details">Basic Details</a></li>
+                <li class="nav-item"><a class="nav-link" href="#dataflow">DataFlow</a></li>
+                <li class="nav-item"><a class="nav-link" href="#dhp">DHP</a></li>
+                <li class="nav-item"><a class="nav-link" href="#police-clearance">Police Clearance</a></li>
+                <li class="nav-item"><a class="nav-link" href="#prometric">Prometric</a></li>
+                <li class="nav-item"><a class="nav-link" href="#medical-tests">Medical Tests</a></li>
+                <li class="nav-item"><a class="nav-link" href="#travel-details">Travel Details</a></li>
+                <li class="nav-item"><a class="nav-link" href="#visa">Visa</a></li>
+            </ul>
+        </nav>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Basic Details Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2 id="basic-details">Basic Details</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.HMC_Portal_email|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.HMC_Portal_password|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.JOB_OFFER_ID|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.follow_up_assigned_to|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DataFlow Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2 id="dataflow">DataFlow</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.DataFlow_issue_date|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.DataFlow_expiry_date|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.DataFlow_case_number|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.DataFlow_passport_number|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.DataFlow_is_paid|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {% if form.instance.DataFlow_certificate_copy %}
+                                <div class="mt-2">
+                                    <label> DataFlow Certificate </label>
+                                    <br>
+                                    {% document_preview form.instance.DataFlow_certificate_copy.url %}
+                                    <a href="{% url 'candidates:delete_dataflow_certificate_copy' form.instance.candidate.id %}" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
+
+                                <p>
+
+
+
+                                </p>
+
+                                </div>
+                            {% else %}
+                                {{ form.DataFlow_certificate_copy|as_crispy_field }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prometric Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2 id="prometric">Prometric</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.Prometric_issue_date|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.Prometric_expiry_date|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.Prometric_status|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {% if form.instance.Prometric_certificate_copy %}
+                                <div class="mt-2">
+                                    <label>Prometric Certificate Copy</label>
+                                    <br>
+                                    {% document_preview form.instance.Prometric_certificate_copy.url %}
+                                    <a href="{% url 'candidates:delete_prometric_certificate' form.instance.candidate.id %}" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
+                                </div>
+                            {% else %}
+                                {{ form.Prometric_certificate_copy|as_crispy_field }}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            {% if form.instance.Prometric_Appointment_copy %}
+                                <div class="mt-2">
+                                    <label>Prometric Appointment Copy</label>
+                                    <br>
+                                    {% document_preview form.instance.Prometric_Appointment_copy.url %}
+                                    <a href="{% url 'candidates:delete_prometric_appointment_copy' form.instance.candidate.id %}" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
+                                </div>
+                            {% else %}
+                                {{ form.Prometric_Appointment_copy|as_crispy_field }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DHP Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2 id="dhp">DHP</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.DHP_email|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.DHP_number|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.DHP_Password|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.DHP_issue_date|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.DHP_expiry_date|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {% if form.instance.DHP_copy %}
+                                <div class="mt-2">
+                                    <label> DHP copy </label>
+                                    <br>
+                                    {% document_preview form.instance.DHP_copy.url %}
+                                    <a href="{% url 'candidates:delete_dhp_certificate' form.instance.candidate.id %}" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
+                                </div>
+                            {% else %}
+                                {{ form.DHP_copy|as_crispy_field }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            {{ form.DHP_note|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Police Clearance Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2 id="police-clearance">Police Clearance</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.PCC_issue_date|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.PCC_expiry_date|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.PCC_is_stamp|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {% if form.instance.PCC_clearance_copy %}
+                                <div class="mt-2">
+                                    <label> PCC document </label>
+                                    <br>
+                                    {% document_preview form.instance.PCC_clearance_copy.url %}
+                                    <a href="{% url 'candidates:delete_police_clearance_copy' form.instance.candidate.id %}" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
+                                </div>
+                            {% else %}
+                                {{ form.PCC_clearance_copy|as_crispy_field }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Medical Tests Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2 id="medical-tests">Medical Tests</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Blood Test Section -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            {{ form.MedicalTest_blood_test|as_crispy_field }}
+                        </div>
+                        <div class="col-md-8">
+                            {% if form.instance.MedicalTest_blood_test_report %}
+                                <div class="mt-2">
+                                    <label>Blood Test Report Copy</label>
+                                    {% document_preview form.instance.MedicalTest_blood_test_report.url %}
+                                    <a href="{% url 'candidates:delete_blood_test_report' form.instance.candidate.id %}" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
+                                </div>
+                            {% else %}
+                                {{ form.MedicalTest_blood_test_report|as_crispy_field }}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- X-Ray Test Section -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            {{ form.MedicalTest_xray_test|as_crispy_field }}
+                        </div>
+                        <div class="col-md-8">
+                            {% if form.instance.MedicalTest_xray_test_report %}
+                                <div class="mt-2">
+                                    <label>X-Ray Test Report Copy</label>
+                                    {% document_preview form.instance.MedicalTest_xray_test_report.url %}
+                                    <a href="{% url 'candidates:delete_xray_test_report' form.instance.candidate.id %}" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
+                                </div>
+                            {% else %}
+                                {{ form.MedicalTest_xray_test_report|as_crispy_field }}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Pregnancy Test Section -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            {{ form.MedicalTest_is_pregnant|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {% if form.instance.MedicalTest_pregnancy_report %}
+                                <div class="mt-2">
+                                    <label>Pregnancy Report Copy</label>
+                                    {% document_preview form.instance.MedicalTest_pregnancy_report.url %}
+                                    <a href="{% url 'candidates:delete_pregnancy_report' form.instance.candidate.id %}" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
+                                </div>
+                            {% else %}
+                                {{ form.MedicalTest_pregnancy_report|as_crispy_field }}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-2">
+                            {{ form.MedicalTest_pregnancy_month|as_crispy_field }}
+                        </div>
+                    </div>
+
+                    <!-- Fit to Work Section -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            {{ form.MedicalTest_is_fit_to_work|as_crispy_field }}
+                        </div>
+                        <div class="col-md-8">
+                            {% if form.instance.MedicalTest_fit_to_work_report %}
+                                <div class="mt-2">
+                                    <label>Fit to Work Report Copy</label>
+                                    {% document_preview form.instance.MedicalTest_fit_to_work_report.url %}
+                                    <a href="{% url 'candidates:delete_fit_to_work_report' form.instance.candidate.id %}" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
+                                </div>
+                            {% else %}
+                                {{ form.MedicalTest_fit_to_work_report|as_crispy_field }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Travel Details Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2 id="travel-details">Travel Details</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.TravelDetails_departure_date|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.TravelDetails_airport|as_crispy_field }}
+                        </div>
+                        <div class="col-md-12">
+                            {{ form.is_candidate_start_work|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            {{ form.TravelDetails_note|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visa Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h2 id="visa">Visa</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    {{ form.Visa_issue_date|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.Visa_expiry_date|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    {{ form.Visa_status|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6">
+                                    {% if form.instance.Visa_copy %}
+                                        <div class="mt-6">
+                                            <label> Visa copy </label>
+                                            {% document_preview form.instance.Visa_copy.url %}
+                                            <a href="{% url 'candidates:delete_visa_copy' form.instance.candidate.id %}" class="btn btn-danger btn-sm">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </a>
+                                        </div>
+                                    {% else %}
+                                        {{ form.Visa_copy|as_crispy_field }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group mt-4">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+        </form>
+    </div>
+{% endblock %}

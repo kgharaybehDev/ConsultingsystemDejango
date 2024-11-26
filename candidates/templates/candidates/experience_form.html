@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% load document_preview %}
+{% block content %}
+<div class="container mt-5">
+    <h2>{{ experience.pk|yesno:"Edit Experience,Add Experience" }}</h2>
+    <form method="post" enctype="multipart/form-data">
+        {{ form.media }}
+        {% csrf_token %}
+
+        <!-- Company Information -->
+        <h4>Company Information</h4>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                {{ form.company_name|as_crispy_field }}
+            </div>
+            <div class="col-md-6">
+                {{ form.company_location|as_crispy_field }}
+            </div>
+        </div>
+
+        <!-- Reference Information -->
+        <h4>Reference Information</h4>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                {{ form.reference_name|as_crispy_field }}
+            </div>
+            <div class="col-md-4">
+                {{ form.reference_job_title|as_crispy_field }}
+            </div>
+            <div class="col-md-4">
+                {{ form.reference_contact_info|as_crispy_field }}
+            </div>
+        </div>
+
+        <!-- Job Information -->
+        <h4>Job Information</h4>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                {{ form.job_title|as_crispy_field }}
+            </div>
+            <div class="col-md-6">
+                <!-- Departments Field -->
+                <div class="form-group">
+                    <label for="id_departments">{{ form.departments.label }}</label>
+                    <select id="id_departments" name="departments" class="form-control select2" multiple="multiple">
+                        {% for department in form.departments.field.queryset %}
+                            <option value="{{ department.pk }}" {% if department.pk in form.departments.value %}selected{% endif %}>
+                                {{ department }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Date Information -->
+        <h4>Date Information</h4>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                {{ form.start_date|as_crispy_field }}
+            </div>
+            <div class="col-md-6">
+                {{ form.end_date|as_crispy_field }}
+            </div>
+        </div>
+
+        <!-- Additional Information -->
+        <h4>Additional Information</h4>
+        <div class="mb-3">
+            {{ form.job_responsibilities|as_crispy_field }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_certification_copy">Certification Copy</label>
+            {% if form.instance.certification_copy %}
+                {% document_preview form.instance.certification_copy.url %}
+                <a href="{% url 'candidates:delete_experience_certification' form.instance.pk  %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Delete</a>
+            {% else %}
+                {{ form.certification_copy|as_crispy_field }}
+            {% endif %}
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="{% url 'candidates:candidate_detail' pk=candidate.pk %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        // Initialize Select2 on the departments field
+        $("#id_departments").select2({
+            width: '100%'  // Ensures that Select2 dropdown takes the full width of the form field
+        });
+    });
+</script>
+{% endblock %}

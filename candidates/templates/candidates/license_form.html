@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% load document_preview %}
+{% block content %}
+    <div class="container mt-5">
+        <h2>{{ object.pk|yesno:"Edit License,Add License" }}</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- License Information -->
+            <h4>License Information</h4>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    {{ form.license_name|as_crispy_field }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.license_number|as_crispy_field }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.license_provider|as_crispy_field }}
+                </div>
+
+            </div>
+
+            <!-- Date Information -->
+            <h4>Date Information</h4>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    {{ form.issued_date|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.expiry_date|as_crispy_field }}
+                </div>
+            </div>
+
+            <!-- License Copy -->
+            <h4>License Copy</h4>
+            <div class="mb-3">
+                {% if  form.instance.license_copy %}
+                    <label for="id_license_copy">Certification Copy</label>
+                    {% document_preview form.instance.license_copy.url %}
+                    <a
+                            href="#"
+                            class="delete-file-link"
+                            data-url="{% url 'candidates:delete_license_copy' form.instance.id %}"
+                            data-file-name=" {{ form.instance.degree }} certification for {{ form.instance.candidate.full_name }}"
+                    >
+                        <i class="fa fa-trash"></i> delete</a
+                    >
+                {% else %}
+                    {{ form.license_copy|as_crispy_field }}
+                {% endif %}
+            </div>
+
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a href="{% url 'candidates:candidate_detail' pk=candidate.pk %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+{% endblock %}

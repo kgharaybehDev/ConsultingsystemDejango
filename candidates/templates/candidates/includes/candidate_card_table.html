@@ -1,0 +1,135 @@
+{% load document_preview %}
+<div class="container candidate-table-container">
+    <table class="table table-bordered table-striped">
+        <thead class="thead-light">
+        <tr>
+            <th scope="row">Name</th>
+            <td colspan="2">{{ candidate.full_name }}</td>
+            <td rowspan="5" class="text-center align-middle">
+                {% if candidate.personal_image and candidate.personal_image.url %}
+                    <img src="{{ candidate.personal_image.url }}" alt="Candidate Image" class="candidate-image"
+                         height="222" width="222">
+                {% else %}
+                    <img src="https://via.placeholder.com/222" alt="Placeholder Image" class="candidate-image"
+                         height="222" width="222">
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Email</th>
+            <td colspan="2">
+                {% if candidate.email %}
+                    <a href="mailto:{{ candidate.email }}" class="text-decoration-none">
+                        {{ candidate.email }}
+                    </a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Phone / WhatsApp</th>
+            <td colspan="2">
+                {% if candidate.call_phone_number %}
+                    <i class="fa fa-phone" aria-hidden="true"></i>
+                    <a href="tel:{{ candidate.call_phone_number }}"
+                       class="btn btn-link">{{ candidate.call_phone_number }}</a>
+                {% endif %}
+                {% if candidate.whatsapp_number %}
+                    <i class="fab fa-whatsapp"></i>
+                    <a href="https://wa.me/{{ candidate.whatsapp_number }}" target="_blank" class="btn btn-link">
+
+                        {{ candidate.whatsapp_number }}</a>
+                {% else %}
+
+                    <i class="fab fa-whatsapp"></i>
+                    <a href="https://wa.me/{{ candidate.call_phone_number }}" target="_blank" class="btn btn-link">
+
+                        {{ candidate.call_phone_number }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Gender</th>
+            <td colspan="2">
+
+                {% if candidate.gender == "M" %}
+                    Male
+                {% else %}
+                    Female
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Birthday / Age</th>
+            <td colspan="2">{{ candidate.birthday | date:"d/m/Y" }} / ({{ candidate.age }})</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">Address</th>
+            <td>{{ candidate.country }} {{ candidate.address }}</td>
+            <th>Nationality</th>
+            <td>{{ candidate.nationality }}</td>
+        </tr>
+        <tr class="thead-dark">
+            <th colspan="4">Documents</th>
+        </tr>
+        <tr>
+            <th>Resume Copy</th>
+            <th>Passport Copy</th>
+            <th>National ID Copy</th>
+            <th>Personal Image</th>
+        </tr>
+        <tr>
+            <td>
+                {% if candidate.resume_copy %}
+                    <div class="document-links">
+                        {% document_preview candidate.resume_copy.url %}
+                        <a href="{{ candidate.resume_copy.url }}" class="btn btn-link" download>
+                            <i class="fa fa-download" aria-hidden="true"></i>
+                            Download</a>
+                    </div>
+                {% else %}
+                    <span class="text-muted">Not Available</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if candidate.passport_copy %}
+                    <div class="document-links">
+                        {% document_preview candidate.passport_copy.url %}
+                        <a href="{{ candidate.passport_copy.url }}" class="btn btn-link" download> <i
+                                class="fa fa-download" aria-hidden="true"></i>&nbsp;&nbsp; Download</a>
+                    </div>
+                {% else %}
+                    <span class="text-muted">Not Available</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if candidate.national_id_copy %}
+                    <div class="document-links">
+                        {% document_preview candidate.national_id_copy.url %}
+                        <a href="{{ candidate.national_id_copy.url }}" class="btn btn-link" download>
+                            <i class="fa fa-download" aria-hidden="true"></i>
+                            &nbsp;&nbsp;
+                            Download</a>
+                    </div>
+                {% else %}
+                    <span class="text-muted">Not Available</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if candidate.personal_image %}
+                    <div class="document-links">
+                        {% document_preview candidate.personal_image.url %}
+                        <a href="{{ candidate.personal_image.url }}" class="btn btn-link" download><i
+                                class="fa fa-download" aria-hidden="true"></i>
+                            &nbsp;&nbsp;
+                            Download</a>
+                    </div>
+                {% else %}
+                    <span class="text-muted">Not Available</span>
+                {% endif %}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

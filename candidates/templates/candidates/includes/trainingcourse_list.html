@@ -1,0 +1,59 @@
+{% load document_preview %}
+<div class="container mt-4">
+    <table class="table table-bordered table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col" class="text-center"  style="width: 20%;">Training Course</th>
+                <th scope="col">Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for course in training_courses %}
+                <tr>
+                    <td class="align-middle text-center">
+                        <!-- Delete Training Course Link -->
+                        <a href="{% url 'candidates:training_course_delete' course.id %}" class="text-danger">
+                            <i class="fa fa-trash"></i>
+                        </a> |
+                        <!-- Edit Training Course Link -->
+                        <a href="{% url 'candidates:training_course_update' course.id %}" class="text-primary ml-2">
+                            <i class="fas fa-pen"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <p><strong>Course Name:</strong> {{ course.course_name }}</p>
+                        <p><strong>Institution:</strong> {{ course.institution }}</p>
+                        <p><strong>Location:</strong> {{ course.location.name }}</p>
+                        <p><strong>Start Date:</strong> {{ course.start_date|date:"d/m/Y" }}
+                            <strong>-</strong>
+                            {% if course.end_date %}
+                                {{ course.end_date|date:"d/m/Y" }}
+                            {% else %}
+                                Present
+                            {% endif %}
+                        </p>
+
+                        <!-- Course Description -->
+                        {% if course.description %}
+                            <p><strong>Description:</strong> {{ course.description }}</p>
+                        {% endif %}
+
+                        <!-- Certification Copy -->
+                        <p>
+                            <strong>Certification Copy:</strong>
+                            {% if course.certification_copy %}
+                                {% document_preview course.certification_copy.url %}
+                            {% else %}
+                                <span class="text-danger">NO CERTIFICATION</span>
+                            {% endif %}
+                        </p>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="2" class="text-center text-muted">No training course records available for this candidate.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

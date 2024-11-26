@@ -1,0 +1,79 @@
+{% load document_preview %}
+<div class="container mt-4">
+    <table class="table table-bordered table-hover">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col" class="text-center" style="width: 20%;">Education</th>
+            <th scope="col">Details</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for education in educations %}
+            <tr>
+                <td class="align-middle text-center">
+                    <a href="{% url 'candidates:education_delete' education.id %}"><i class="fa fa-trash"></i></a> | 
+                    <!-- Edit Education Link -->
+                    <a href="{% url 'candidates:education_update' education.id %}" class="text-primary ml-2">
+                        <i class="fas fa-pen"></i>
+                    </a>
+                </td>
+                <td>
+                    <p><strong>Institution:</strong> {{ education.institution }}</p>
+                    <p><strong>Degree:</strong> {{ education.degree }}<strong>
+                        in </strong> {{ education.field_of_study }}</p>
+                    <p><strong>Start Date:</strong> {{ education.start_date|date:"d/m/Y" }}
+                        <strong>-</strong>
+
+                        {% if education.end_date %}
+                            {{ education.end_date|date:"d/m/Y" }}
+                        {% else %}
+                            Present
+
+                        {% endif %}</p>
+                    {% if education.online %}
+                        <p><strong>Online:</strong> {{ education.online|yesno:"Yes,No" }}</p>
+                    {% endif %}
+                    {% if education.gpa %}
+                        <p><strong>GPA:</strong> {{ education.gpa }}
+                    {% endif %}
+                    {% if education.grade %}
+                        <strong>Grade:</strong> {{ education.grade }}</p>
+                    {% endif %}
+
+                    <!-- Certification Copy and Transcript Copy - Displayed in One Line -->
+                    <div class="d-flex align-items-center mb-2">
+                        <!-- Certification Copy -->
+                        <div class="me-3">
+                            <strong>Certification Copy:</strong>
+                            {% if education.certification_copy %}
+                                {% document_preview education.certification_copy.url %}
+                            {% else %}
+                                <span class="text-danger">NO CERTIFICATION</span>
+                            {% endif %}
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="mx-2">|</div>
+
+                        <!-- Transcript Copy -->
+                        <div class="me-3">
+                            <strong>Transcript Copy:</strong>
+                            {% if education.transcript_copy %}
+                                {% document_preview education.transcript_copy.url %}
+                            {% else %}
+                                <span class="text-danger">NO TRANSCRIPT</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="2" class="text-center text-muted">No education records available for this candidate.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

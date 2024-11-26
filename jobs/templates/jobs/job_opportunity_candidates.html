@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+
+{% load i18n %}
+<!-- Assigned Candidates -->
+{% block content %}
+    <div class="row mt-5">
+        <div class="col">
+            <h3><i class="fas fa-users"></i> {% trans "Assigned Candidates" %}</h3>
+            {% if candidates %}
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Full Name" %}</th>
+                        <th>{% trans "Email" %}</th>
+                        <th>{% trans "Phone" %}</th>
+                        <th>{% trans "WhatsApp" %}</th>
+                        <th>{% trans "Actions" %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for candidate in candidates %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'candidates:candidate_detail' pk=candidate.pk %}">
+                                    {{ candidate.full_name }}
+                                </a>
+                            </td>
+                            <td>
+                                {% if candidate.email %}
+                                    <a href="mailto:{{ candidate.email }}" class="text-decoration-none">
+                                        {{ candidate.email }}
+                                    </a>
+                                {% endif %}
+                            </td>
+                            <td>{% if candidate.call_phone_number %}
+                                <i class="fa fa-phone" aria-hidden="true"></i>
+                                <a href="tel:{{ candidate.call_phone_number }}"
+                                   class="btn btn-link">{{ candidate.call_phone_number }}</a>
+                            {% endif %}
+
+                            </td>
+                            <td>
+                                {% if candidate.whatsapp_number %}
+                                    <i class="fab fa-whatsapp"></i>
+                                    <a href="https://wa.me/{{ candidate.whatsapp_number }}" target="_blank"
+                                       class="btn btn-link">
+                                        {{ candidate.whatsapp_number }}
+                                    </a>
+                                {% else %}
+                                    <i class="fab fa-whatsapp"></i>
+                                    <a href="https://wa.me/{{ candidate.call_phone_number }}" target="_blank"
+                                       class="btn btn-link">
+                                        {{ candidate.call_phone_number }}
+                                    </a>
+                                {% endif %}
+
+
+                            </td>
+
+
+                            <td>
+                                <a href="" class="btn btn-danger btn-sm"
+                                   data-url="{% url 'jobs:job_opportunity_remove_candidate' job_opportunity.pk candidate.pk %}"
+                                   data-file-name="  {{ candidate.full_name }}">
+                                    <i class="fas fa-trash-alt"></i>
+                                    {% trans "Remove" %}
+                                </a>
+
+                                <a href="{% url 'candidates:candidate_application_data_update' candidate.pk %}"
+                                   class="btn btn-primary btn-sm">
+                                    <i class="fas fa-file-signature"></i> {% trans "Application" %}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>{% trans "No candidates assigned to this job opportunity." %}</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Add Language</h2>
+    <form method="post">
+        {{ form.media }}
+        {% csrf_token %}
+
+        <!-- Language Information -->
+        <h4>Language Information</h4>
+        <div class="mb-3">
+            {{ form.language|as_crispy_field }}
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="{% url 'candidates:candidate_detail' pk=candidate.pk %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

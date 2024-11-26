@@ -1,0 +1,180 @@
+<!-- templates/candidates/dhp_cv.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ candidate.full_name }} - DHP CV</title>
+    <style>
+        /* CSS styles to format the CV */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .cv-container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .section {
+            margin-top: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            border-bottom: 1px solid #000;
+            margin-bottom: 10px;
+        }
+
+        .personal-image {
+            float: right;
+            width: 150px;
+            height: 200px;
+            object-fit: cover;
+            border: 1px solid #000;
+        }
+
+        .clear {
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+<div class="cv-container">
+    <h1>{{ candidate.full_name }}</h1>
+    {% if candidate.personal_image %}
+        <img src="{{ candidate.personal_image.url }}" alt="Personal Image" class="personal-image">
+    {% endif %}
+    <div class="clear"></div>
+
+    <!-- Personal Information Section -->
+    <div class="section">
+        <div class="section-title">Personal Information</div>
+        <p><strong>Gender:</strong> {{ candidate.get_gender_display }}</p>
+        <p><strong>Birthday:</strong> {{ candidate.birthday }} ({{ candidate.age }})</p>
+        <p><strong>Nationality:</strong> {{ candidate.nationality }}</p>
+        <p><strong>Country:</strong> {{ candidate.country }}</p>
+        <p><strong>Address:</strong> {{ candidate.address }}</p>
+        <p><strong>Email:</strong>
+                {% if candidate.email %}
+                    <a href="mailto:{{ candidate.email }}" class="text-decoration-none">
+                        {{ candidate.email }}
+                    </a>
+                {% endif %}
+        </p>
+        <p><strong>Call Phone Number:</strong>
+            {% if candidate.call_phone_number %}
+                <i class="fa fa-phone" aria-hidden="true"></i>
+                <a href="tel:{{ candidate.call_phone_number }}"
+                   class="btn btn-link">{{ candidate.call_phone_number }}</a>
+            {% endif %}
+            <br>
+            {% if candidate.whatsapp_number %}
+                <i class="fab fa-whatsapp"></i>
+                <a href="https://wa.me/{{ candidate.whatsapp_number }}" target="_blank" class="btn btn-link">
+
+                    {{ candidate.whatsapp_number }}</a>
+            {% else %}
+
+                <i class="fab fa-whatsapp"></i>
+                <a href="https://wa.me/{{ candidate.call_phone_number }}" target="_blank" class="btn btn-link">
+
+                    {{ candidate.call_phone_number }}</a>
+            {% endif %}
+
+        </p>
+        <p><strong>WhatsApp Phone Number:</strong> {{ candidate.whatsapp_phone_number }}</p>
+    </div>
+
+    <!-- Education Section -->
+    <div class="section">
+        <div class="section-title">Education</div>
+        {% for education in educations %}
+            <h3>{{ education.degree }} in {{ education.field_of_study }}</h3>
+            <p><strong>Institution:</strong> {{ education.institution }}</p>
+            <p><strong>Duration:</strong> {{ education.get_duration }}</p>
+            <p><strong>GPA:</strong> {{ education.gpa }}</p>
+            <p><strong>Grade:</strong> {{ education.grade }}</p>
+            {% if education.certification_copy %}
+                <p><a href="{{ education.certification_copy.url }}">Certification Copy</a></p>
+            {% endif %}
+            {% if education.transcript_copy %}
+                <p><a href="{{ education.transcript_copy.url }}">Transcript Copy</a></p>
+            {% endif %}
+        {% empty %}
+            <p>No education records.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Experience Section -->
+    <div class="section">
+        <div class="section-title">Experience</div>
+        {% for experience in experiences %}
+            <h3>{{ experience.job_title }} at {{ experience.company_name }}</h3>
+            <p><strong>Location:</strong> {{ experience.company_location }}</p>
+            <p><strong>Duration:</strong> {{ experience.get_duration }}</p>
+            <p><strong>Departments:</strong> {{ experience.departments.all|join:", " }}</p>
+            {% if experience.job_responsibilities and experience.job_responsibilities|length > 15 %}
+                <p><strong>Job Responsibilities:</strong> {{ experience.job_responsibilities|safe }}</p>
+            {% endif %}
+            {% if experience.certification_copy %}
+                <p><a href="{{ experience.certification_copy.url }}">Certification Copy</a></p>
+            {% endif %}
+        {% empty %}
+            <p>No experience records.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Licenses Section -->
+    <div class="section">
+        <div class="section-title">Licenses</div>
+        {% for license in licenses %}
+            <h3>{{ license.license_name }}</h3>
+            <p><strong>License Number:</strong> {{ license.license_number }}</p>
+            <p><strong>License Provider:</strong> {{ license.license_provider }}</p>
+            <p><strong>Issued Date:</strong> {{ license.issued_date }}</p>
+            <p><strong>Expiry Date:</strong> {{ license.expiry_date }}</p>
+            {% if license.license_copy %}
+                <p><a href="{{ license.license_copy.url }}">License Copy</a></p>
+            {% endif %}
+        {% empty %}
+            <p>No licenses.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Languages Section -->
+    <div class="section">
+        <div class="section-title">Languages</div>
+        <p>{{ languages.all|join:", " }}</p>
+    </div>
+
+    <!-- Training Courses Section -->
+    <div class="section">
+        <div class="section-title">Training Courses</div>
+        {% for course in training_courses %}
+            <h3>{{ course.course_name }}</h3>
+            <p><strong>Institution:</strong> {{ course.institution }}</p>
+            <p><strong>Duration:</strong> {{ course.start_date }} - {{ course.end_date|default:"Present" }}</p>
+            <p><strong>Description:</strong> {{ course.description|safe }}</p>
+            {% if course.certification_copy %}
+                <p><a href="{{ course.certification_copy.url }}">Certification Copy</a></p>
+            {% endif %}
+        {% empty %}
+            <p>No training courses.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Application Data Section (Optional) -->
+    {% if application_data %}
+        <div class="section">
+            <div class="section-title">Application Data</div>
+            <p><strong>HMC Portal Email:</strong> {{ application_data.HMC_Portal_email }}</p>
+            <p><strong>DHP Number:</strong> {{ application_data.DHP_number }}</p>
+            <!-- Add more fields as necessary -->
+        </div>
+    {% endif %}
+</div>
+</body>
+</html>

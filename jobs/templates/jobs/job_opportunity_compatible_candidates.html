@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>{% trans "Compatible Candidates for" %} {{ job_opportunity.job_title }}</h1>
+        {% if candidates %}
+            <!-- Per-page selection -->
+            <form method="get" class="mb-3">
+                <label for="per_page">{% trans "Items per page:" %}</label>
+                <select name="per_page" id="per_page" class="form-select d-inline-block w-auto"
+                        onchange="this.form.submit()">
+                    <option value="5" {% if per_page == 5 %}selected{% endif %}>5</option>
+                    <option value="10" {% if per_page == 10 %}selected{% endif %}>10</option>
+                    <option value="20" {% if per_page == 20 %}selected{% endif %}>20</option>
+                </select>
+                <input type="hidden" name="sort" value="{{ sort_by }}">
+                <input type="hidden" name="order" value="{{ order }}">
+            </form>
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if candidates.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page=1&sort={{ sort_by }}&order={{ order }}&per_page={{ per_page }}"
+                               aria-label="First">&laquo;&laquo;</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ candidates.previous_page_number }}&sort={{ sort_by }}&order={{ order }}&per_page={{ per_page }}"
+                               aria-label="Previous">&laquo;</a>
+                        </li>
+                    {% endif %}
+
+                    {% for num in candidates.paginator.page_range %}
+                        {% if candidates.number == num %}
+                            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="?page={{ num }}&sort={{ sort_by }}&order={{ order }}&per_page={{ per_page }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if candidates.has_next %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ candidates.next_page_number }}&sort={{ sort_by }}&order={{ order }}&per_page={{ per_page }}"
+                               aria-label="Next">&raquo;</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ candidates.paginator.num_pages }}&sort={{ sort_by }}&order={{ order }}&per_page={{ per_page }}"
+                               aria-label="Last">&raquo;&raquo;</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <a href="{% url 'jobs:job_opportunity_detail' job_opportunity.pk %}" class="btn btn-secondary">
+                {% trans "Back to Job Opportunity Details" %}
+            </a>
+
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>
+                        <a href="?sort=full_name&order={% if sort_by == 'full_name' and order == 'asc' %}desc{% else %}asc{% endif %}&per_page={{ per_page }}">
+                            {% trans "Full Name" %}
+                            {% if sort_by == "full_name" %}
+                                {% if order == "asc" %} &#9650; {% else %} &#9660; {% endif %}
+                            {% endif %}
+                        </a>
+                    </th>
+                    <th>
+                        <a href="?sort=email&order={% if sort_by == 'email' and order == 'asc' %}desc{% else %}asc{% endif %}&per_page={{ per_page }}">
+                            {% trans "Email" %}
+                            {% if sort_by == "email" %}
+                                {% if order == "asc" %} &#9650; {% else %} &#9660; {% endif %}
+                            {% endif %}
+                        </a>
+                    </th>
+                    <th>
+                        <a href="?sort=total_experience&order={% if sort_by == 'total_experience' and order == 'asc' %}desc{% else %}asc{% endif %}&per_page={{ per_page }}">
+                            {% trans "Total Experience (Years)" %}
+                            {% if sort_by == "total_experience" %}
+                                {% if order == "asc" %} &#9650; {% else %} &#9660; {% endif %}
+                            {% endif %}
+                        </a>
+                    </th>
+                    <th>
+                        <a href="?sort=age&order={% if sort_by == 'age' and order == 'asc' %}desc{% else %}asc{% endif %}&per_page={{ per_page }}">
+                            {% trans "Age" %}
+                            {% if sort_by == "age" %}
+                                {% if order == "asc" %} &#9650; {% else %} &#9660; {% endif %}
+                            {% endif %}
+                        </a>
+                    </th>
+                    <th>{% trans "Experience Departments" %}</th>
+                    <th>{% trans "Actions" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for candidate in candidates %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'candidates:candidate_detail' candidate.pk %}">
+                                {{ candidate.full_name }}
+                            </a>
+                        </td>
+                        <td>
+                       {% if candidate.email %}
+                    <a href="mailto:{{ candidate.email }}" class="text-decoration-none">
+                        {{ candidate.email }}
+                    </a>
+                {% endif %}
+                        </td>
+                        <td>{{ candidate.total_experience }}</td>
+                        <td>{{ candidate.age_in_years }}</td>
+                        <td>
+                            {% for experience in candidate.experiences.all %}
+                                {% for department in experience.departments.all %}
+                                    {{ department }} <br>
+                                    {{ experience.get_duration }} | {{ experience.end_date|date:"d/m/Y"|default:"NOW" }}
+                                    <hr>
+                                {% endfor %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <a href="{% url 'jobs:job_opportunity_add_candidate' job_opportunity.pk candidate.pk %}"
+                               class="btn btn-sm btn-success">
+                                {% trans "Add to Job Opportunity" %}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+
+        {% else %}
+            <p>{% trans "No compatible candidates found." %}</p>
+        {% endif %}
+
+    </div>
+{% endblock %}

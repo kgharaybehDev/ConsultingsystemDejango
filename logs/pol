@@ -1,0 +1,24 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::390402579217:user/Django_candidate_management_user"
+            },
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObjectAcl",
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:DeleteObject",
+                "s3:PutObjectAcl"
+            ],
+            "Resource": [
+                "arn:aws:s3:::django-candidate-management-s3-bucket00/*",
+                "arn:aws:s3:::django-candidate-management-s3-bucket00"
+            ]
+        }
+    ]
+}

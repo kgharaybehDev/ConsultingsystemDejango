@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load experiences %}
+{% load educations %}
+{% load languages %}
+{% load training_courses %}
+{% load licenses_list %}
+{% load candidate_card_table %}
+{% load document_preview %}
+
+{% block content %}
+
+    {% include 'include/candidate_add_info.html' %}
+
+    <!-- Button to Export CV -->
+    <a href="{% url 'documents:candidate_export_pdf_CV' pk=candidate.pk %}">
+        Download CV as PDF
+    </a>
+
+    |
+
+    <a href="{% url 'documents:HMC_Sheet' pk=candidate.pk %}">
+        Download HMC Sheet as PDF
+    </a>
+    | <a href="{% url 'candidates:download_candidate_directory' candidate_id=candidate.id %}">
+    Download Candidate Files
+</a>
+    |
+    <!-- templates/candidates/candidate_detail.html -->
+
+    <a href="{% url 'candidates:download_vcf' candidate_id=candidate.id %}">
+        <i class="fas fa-address-card"></i> Download VCF
+    </a>
+
+    <!-- Render candidate details -->
+    {% candidate_card_table candidate.pk %}
+    {% educations candidate.pk %}
+    <hr>
+    {% experiences candidate.pk %}
+    <hr>
+    {% licenses candidate.pk %}
+    <hr>
+    {% languages candidate.pk %}
+    <hr>
+    {% training_courses candidate.pk %}
+
+{% endblock %}

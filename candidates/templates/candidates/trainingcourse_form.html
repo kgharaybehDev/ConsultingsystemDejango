@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% load document_preview %}
+{% block content %}
+    <div class="container mt-5">
+        <h2>{{ training_course.pk|yesno:"Edit Training Course,Add Training Course" }}</h2>
+        <form method="post" enctype="multipart/form-data">
+            {{ form.media }}
+            {% csrf_token %}
+
+            <!-- Training Course Information -->
+            <h4>Course Information</h4>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    {{ form.course_name|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.institution|as_crispy_field }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    {{ form.start_date|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.end_date|as_crispy_field }}
+                </div>
+            </div>
+            <div class="mb-3">
+                {{ form.location|as_crispy_field }}
+            </div>
+            <div class="mb-3">
+                {{ form.description }}
+            </div>
+            <div class="mb-3">
+                {% if  form.instance.certification_copy %}
+                    <label for="id_certification_copy">Certification Copy</label>
+                    {% document_preview form.instance.certification_copy.url %}
+                    <a href="#"
+                       class="delete-file-link"
+                       data-url="{% url 'candidates:delete_training_course_certification' form.instance.id %}"
+                       data-file-name=" {{ form.instance.degree }} certification for {{ form.instance.candidate.full_name }}">
+                        <i class="fa fa-trash"></i>
+                        delete
+                    </a>
+                {% else %}
+                    {{ form.certification_copy|as_crispy_field }}
+                {% endif %}
+            </div>
+
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a href="{% url 'candidates:candidate_detail' pk=candidate.pk %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+{% endblock %}

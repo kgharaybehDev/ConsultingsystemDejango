@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+<div class="container mt-4">
+    {% if form.instance.pk %}
+        <h1>{% trans "Edit Job Opportunity" %}</h1>
+    {% else %}
+        <h1>{% trans "Create Job Opportunity" %}</h1>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+
+        <!-- Job Details Section -->
+        <h5 class="mb-3">{% trans "Job Details" %}</h5>
+        <hr>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                {{ form.job_title|as_crispy_field }}
+            </div>
+            <div class="col-md-6">
+                {{ form.company_name|as_crispy_field }}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                {{ form.job_department|as_crispy_field }}
+            </div>
+            <div class="col-md-6">
+                {{ form.departments|as_crispy_field }}
+            </div>
+        </div>
+
+        <div class="mb-3">
+            {{ form.job_description|as_crispy_field }}
+        </div>
+
+        <!-- Requirements Section -->
+        <h5 class="mb-3">{% trans "Candidate Requirements" %}</h5>
+        <hr>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                {{ form.minimum_years_of_experience|as_crispy_field }}
+            </div>
+            <div class="col-md-4">
+                {{ form.minimum_age|as_crispy_field }}
+            </div>
+            <div class="col-md-4">
+                {{ form.maximum_age|as_crispy_field }}
+            </div>
+        </div>
+
+        <div class="mb-3">
+            {{ form.gender|as_crispy_field }}
+        </div>
+
+        <!-- Accepted Degrees and Fields of Study -->
+        <h5 class="mb-3">{% trans "Educational Requirements" %}</h5>
+        <hr>
+        <div class="mb-3">
+            {{ form.accepted_degrees|as_crispy_field }}
+        </div>
+        <div class="mb-3">
+            {{ form.fields_of_study|as_crispy_field }}
+        </div>
+
+        <!-- Nationalities -->
+        <h5 class="mb-3">{% trans "Preferred Nationalities" %}</h5>
+        <hr>
+        <div class="mb-3">
+            {{ form.nationalities|as_crispy_field }}
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-success">{% trans "Save" %}</button>
+        <a href="{% url 'jobs:job_opportunity_list' %}" class="btn btn-secondary">{% trans "Cancel" %}</a>
+    </form>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        // Initialize Select2 on the departments field
+        $("#id_accepted_degrees").select2({
+            width: '100%'  // Ensures that Select2 dropdown takes the full width of the form field
+        }); 
+        $("#id_nationalities").select2({
+            width: '100%'  // Ensures that Select2 dropdown takes the full width of the form field
+        });
+        $("#id_departments").select2({
+            width: '100%'  // Ensures that Select2 dropdown takes the full width of the form field
+        });    
+        $("#id_fields_of_study").select2({
+            width: '100%'  // Ensures that Select2 dropdown takes the full width of the form field
+        });
+    });
+</script>
+{% endblock %}

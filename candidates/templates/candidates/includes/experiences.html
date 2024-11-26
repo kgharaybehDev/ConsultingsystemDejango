@@ -1,0 +1,71 @@
+{% load document_preview %}
+<div class="container mt-4">
+    <table class="table table-bordered table-hover">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col" class="text-center" style="width: 20%;">Experience</th>
+            <th scope="col">Details</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for experience in experiences %}
+            <tr>
+                <td class="align-middle text-center">
+                    <a href="{% url 'candidates:experience_delete' experience.id %}"><i class="fa fa-trash"></i></a> |
+                    <a href="{% url 'candidates:experience_update' experience.id %}" class="text-primary ml-2">
+                        <i class="fas fa-pen"></i>
+                    </a>
+                </td>
+                <td>
+                    <p><strong>Job Title:</strong> {{ experience.job_title }}</p>
+                    <p><strong>Company Name:</strong> {{ experience.company_name }}
+                        / {{ experience.company_location.name }}</p>
+
+                    <p><strong>Departments:</strong>
+                        {% for department in experience.departments.all %}
+                            {{ department.abbreviation }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    <p><strong>Start Date:</strong> {{ experience.start_date|date:"d/m/Y" }}
+                        <strong>-</strong>
+                        {% if experience.end_date %}
+                            {{ experience.end_date|date:"d/m/Y" }}
+                        {% else %}
+                            Present
+                        {% endif %}
+                        ({{ experience.get_duration }})
+                    </p>
+                    <p>
+                        {% if experience.reference_name %}
+                            <strong>Reference Name:</strong> {{ experience.reference_name }}
+                        {% endif %}
+                        {% if experience.reference_job_title %}
+                            ({{ experience.reference_job_title }} )
+                        {% endif %}
+                        {% if experience.reference_contact_info %}
+                            {{ experience.reference_contact_info }}
+                        {% endif %}
+
+                        {% if experience.job_responsibilities and experience.job_responsibilities|length > 15 %}
+                            <p><strong>Job Responsibilities:</strong> {{ experience.job_responsibilities|safe }}</p>
+
+                        {% endif %}
+                    <br>
+
+                    <strong>Certification Copy:</strong>
+                    {% if experience.certification_copy %}
+                        {% document_preview experience.certification_copy.url %}
+                    {% else %}
+                        <span class="text-danger">NO CERTIFICATION</span>
+                    {% endif %}
+                    </p>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="2" class="text-center text-muted">No experience records available for this candidate.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

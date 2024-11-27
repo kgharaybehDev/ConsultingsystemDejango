@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-PROJECT_MAIN_DIR_NAME="karamDjango"
+PROJECT_MAIN_DIR_NAME="ConsultingsystemDejango"
 
 # Validate variables
 if [ -z "$PROJECT_MAIN_DIR_NAME" ]; then

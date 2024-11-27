@@ -10,3 +10,4 @@ sudo cp "/home/ubuntu/$PROJECT_MAIN_DIR_NAME/gunicorn/gunicorn.service" "/etc/sy
 # Start and enable Gunicorn service
 sudo systemctl start gunicorn.service
 sudo systemctl enable gunicorn.service
+

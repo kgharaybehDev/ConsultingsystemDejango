@@ -23,3 +23,5 @@ sudo gpasswd -a www-data ubuntu
 
 # Restart Nginx service
 sudo systemctl restart nginx
+
+

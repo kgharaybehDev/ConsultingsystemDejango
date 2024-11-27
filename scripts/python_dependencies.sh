@@ -25,3 +25,5 @@ echo "Installing Python dependencies..."
 pip install -r "/home/ubuntu/$PROJECT_MAIN_DIR_NAME/requirements.txt"
 
 echo "Dependencies installed successfully."
+
+

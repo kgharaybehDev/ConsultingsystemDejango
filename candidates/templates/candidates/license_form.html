@@ -42,7 +42,7 @@
                     <a
                             href="#"
                             class="delete-file-link"
-                            data-url="{% url 'candidates:delete_license_copy' form.instance.id %}"
+                            data-url="{% url 'candidates:delete_license_copy' form.instance.pk %}"
                             data-file-name=" {{ form.instance.degree }} certification for {{ form.instance.candidate.full_name }}"
                     >
                         <i class="fa fa-trash"></i> delete</a
